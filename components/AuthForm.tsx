@@ -22,10 +22,15 @@ import {
 import { Input } from "@/components/ui/input"
 import CustomInput from './CustomInput';
 import { AuthFormSchema } from '@/lib/utils';
+import SignUp from '@/app/(auth)/sign-up/page';
+import { useRouter } from 'next/navigation';
+import { getLoggedInUser, signIn, signUp } from '@/lib/actions/user.actions';
  
 const AuthForm = ({type}:{type: string}) => {
+    const router = useRouter();
     const [user, setUser] = useState(null)
     const [isLoading, setIsLoading] = useState(false);
+    // const loggedInUser = getLoggedInUser();
 
     const formschema = AuthFormSchema(type);
 
@@ -35,16 +40,35 @@ const AuthForm = ({type}:{type: string}) => {
     defaultValues: {
       email: "", 
       password: "",
-    },
+    }
   })
  
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formschema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    setIsLoading(true)
-    console.log(values)
-    setIsLoading(false)
+    const onSubmit = async (data: z.infer<typeof 
+    formschema>) => {
+    setIsLoading(true);
+    
+    try {
+       // sign-up with appwrite and create a plaid link token
+       if (type === 'sign-up') {
+            const newUser = await signUp(data); //we made everthing except for email/pw optional to get rid of error
+            //even though we know, the optional parameters are going to be present we can do this cause the zod-validation on the form is protecting us
+            setUser(newUser);
+       } 
+
+       if (type === 'sign-in') {
+            const response = await signIn({
+                email: data.email,
+                password: data.password,
+            })
+            if(response) router.push('/')
+        }        
+    } catch (error) {
+        console.log(error)  
+    }finally {
+        setIsLoading(false)
+    }
+    
   }    
 
   return (
@@ -142,7 +166,7 @@ const AuthForm = ({type}:{type: string}) => {
                             control={form.control}
                             name="ssn"
                             label="SSN"
-                            placeholder="Ex: 123-324-2313"
+                            placeholder="Ex: 123-456-687"
                         /> 
                     </div>
                     </>
