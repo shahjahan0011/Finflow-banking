@@ -25,12 +25,13 @@ import { AuthFormSchema } from '@/lib/utils';
 import SignUp from '@/app/(auth)/sign-up/page';
 import { useRouter } from 'next/navigation';
 import { getLoggedInUser, signIn, signUp } from '@/lib/actions/user.actions';
+import PlaidLink from './PlaidLink';
  
 const AuthForm = ({type}:{type: string}) => {
     const router = useRouter();
     const [user, setUser] = useState(null)
     const [isLoading, setIsLoading] = useState(false);
-    const loggedInUser = getLoggedInUser();
+    // const loggedInUser = getLoggedInUser();
 
     const formschema = AuthFormSchema(type);
 
@@ -50,8 +51,21 @@ const AuthForm = ({type}:{type: string}) => {
     
     try {
        // sign-up with appwrite and create a plaid link token
+        const userData = {
+            firstName: data.firstName!,
+            lastName: data.lastName!,
+            address1: data.address1!,
+            city: data.city!,
+            postalCode: data.postalCode!,
+            ssn: data.ssn!,
+            dateOfBirth: data.dateOfBirth!,
+            state: data.state!,
+            email: data.email,
+            password: data.password,
+        }
+
        if (type === 'sign-up') {
-            const newUser = await signUp(data); //we made everthing except for email/pw optional to get rid of error
+            const newUser = await signUp(userData); //we made everthing except for email/pw optional to get rid of error
             //even though we know, the optional parameters are going to be present we can do this cause the zod-validation on the form is protecting us
             setUser(newUser);
        } 
@@ -106,6 +120,7 @@ const AuthForm = ({type}:{type: string}) => {
         {user ?(
             <div className="flex flex-col gap-4">
                 {/* Plaidlink */}
+                <PlaidLink user={user} variant="primary" />
             </div>
         ):(
             <>
@@ -216,7 +231,7 @@ const AuthForm = ({type}:{type: string}) => {
                         </Link>
             </footer>
             </>
-        )}
+        )} 
     </section>
   )
 }
