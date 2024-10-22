@@ -9,6 +9,7 @@ import { Languages } from "lucide-react";
 import { plaidClient } from "../plaid";
 import { revalidatePath } from "next/cache";
 import { addFundingSource, createDwollaCustomer } from "./dwolla.actions";
+import { create } from "domain";
 
 const {
     APPWRITE_DATABASE_ID: DATABASE_ID,
@@ -37,16 +38,15 @@ export const signIn = async ({email, password}: signInProps) => {
     try {
         // Mutation / Database / Make fetch
         const { account } = await createAdminClient();
-        const response = await account.createEmailPasswordSession(email, password );
 
-        cookies().set("appwrite-session", response.secret, {
+        const session = await account.createEmailPasswordSession(email, password);
+        cookies().set("appwrite-session", session.secret, { //'appwrite-session' the name which is first part before the hyphen has to be same as the one you set up during createClientSession in appwrite.ts 
           path: "/",
           httpOnly: true,
           sameSite: "strict",
           secure: true,
-        });
-
-        const user = await getUserInfo({ userId: response.userId }) 
+  });
+        const user = await getUserInfo({ userId: session.userId }) 
 
         return parseStringify(user);
         
@@ -254,3 +254,34 @@ export const exchangePublicToken = async ({
     }
   }; 
  
+export const getBanks = async ({userId}: getBanksProps ) => {
+  try {
+    const {database} = await createAdminClient();
+
+    const banks = await database.listDocuments(
+        DATABASE_ID!,
+        BANK_COLLECTION_ID!,
+        [Query.equal('userId',[userId])]
+    )
+    return parseStringify(banks.documents);
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getBank = async ({documentId}: getBankProps ) => {
+  try {
+    const {database} = await createAdminClient();
+
+    const bank = await database.listDocuments(
+        DATABASE_ID!,
+        BANK_COLLECTION_ID!,
+        [Query.equal('$id',[documentId])]
+    )
+    return parseStringify(bank.documents[0]);
+
+  } catch (error) {
+    console.log(error);
+  }
+}
