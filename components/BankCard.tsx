@@ -35,7 +35,7 @@ const BankCard = ({account, userName, showBalance=true}
                     tracking-[1.1px] text-white">
                         ●●●● ●●●● ●●●●
                         <span className="text-16">
-                            &nbsp;1642{account.mask}
+                            &nbsp; {account.mask}
                         </span>
                     </p>
                 </article>

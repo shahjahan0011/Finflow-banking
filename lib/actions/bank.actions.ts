@@ -12,8 +12,14 @@ import {
 import { plaidClient } from "../plaid";
 import { parseStringify } from "../utils";
 
+<<<<<<< HEAD
 // import { getTransactionsByBankId } from "./transaction.actions";
 import { getBanks, getBank } from "./user.actions";
+=======
+
+import { getBanks, getBank } from "./user.actions";
+import { getTransactionsByBankId } from "./transaction.action";
+>>>>>>> feature
 
 // Get multiple bank accounts
 export const getAccounts = async ({ userId }: getAccountsProps) => {
@@ -222,8 +228,12 @@ export const createTransfer = async () => {
       error
     );
   }
+<<<<<<< HEAD
 };
 
 function getTransactionsByBankId(arg0: { bankId: any; }) {
   throw new Error("Function not implemented.");
 }
+=======
+};
+>>>>>>> feature
