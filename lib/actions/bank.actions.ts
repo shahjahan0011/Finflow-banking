@@ -12,14 +12,11 @@ import {
 import { plaidClient } from "../plaid";
 import { parseStringify } from "../utils";
 
-<<<<<<< HEAD
-// import { getTransactionsByBankId } from "./transaction.actions";
-import { getBanks, getBank } from "./user.actions";
-=======
 
 import { getBanks, getBank } from "./user.actions";
 import { getTransactionsByBankId } from "./transaction.action";
->>>>>>> feature
+import { log } from "console";
+
 
 // Get multiple bank accounts
 export const getAccounts = async ({ userId }: getAccountsProps) => {
@@ -81,6 +78,8 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
     });
     const accountData = accountsResponse.data.accounts[0];
 
+    console.log(accountData);
+
     // get transfer transactions from appwrite
     const transferTransactionsData = await getTransactionsByBankId({
       bankId: bank.$id,
@@ -88,7 +87,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
 
     const transferTransactions = transferTransactionsData.documents.map(
       (transferData: Transaction) => ({
-        id: transferData.$id,
+        id: transferData.id,
         name: transferData.name!,
         amount: transferData.amount!,
         date: transferData.$createdAt,
@@ -228,12 +227,7 @@ export const createTransfer = async () => {
       error
     );
   }
-<<<<<<< HEAD
+
 };
 
-function getTransactionsByBankId(arg0: { bankId: any; }) {
-  throw new Error("Function not implemented.");
-}
-=======
-};
->>>>>>> feature
+

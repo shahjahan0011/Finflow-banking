@@ -22,10 +22,10 @@ const appwriteItemId = (id as string) || accounts?.data[0]?.appwriteItemId ;
 
 const account = await getAccount({ appwriteItemId });
 
-// console.log({
-//   accountsData,
-//   account
-// })
+console.log({
+  accountsData,
+  account
+})
 
 
   return (
@@ -48,7 +48,7 @@ const account = await getAccount({ appwriteItemId });
 
       <RecentTransactions
         accounts={accountsData}
-        transactions={accounts?.transactions}t
+        transactions={accounts?.transactions}
         appwriteItemId={appwriteItemId}
         page={currentPage}
       />
