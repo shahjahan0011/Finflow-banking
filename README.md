@@ -5,9 +5,9 @@ Thank you for your patience.
 
 Currently debugging the code , 
 
-Recently , there were a few changes to the Appwrite and Plaid sand-box environment 
+Recently , there were a few changes to the Appwrite(server error for the free version) and Plaid sand-box environment 
 and the previous code is having errors pulling up the transactions summary. 
 
 The website will be up as soon as possible !
 
-March 22,2024.
+November 14,2024.
