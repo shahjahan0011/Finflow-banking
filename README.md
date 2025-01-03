@@ -10,4 +10,3 @@ and the previous code is having errors pulling up the transactions summary.
 
 The website will be up as soon as possible !
 
-November 14,2024.
